@@ -12,20 +12,21 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Sebastian De Deyne",
-            "email": "sebastian@spatie.be",
-            "homepage": "https://github.com/sebastiandedeyne",
+            "name": "Ignace Nyamagana Butera",
+            "email": "nyamsprod@gmail.com",
+            "homepage": "https://github.com/nyamsprod",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.0",
         "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.0",
         "league/uri-components": "^2.3"
     },
     "require-dev": {
         "league/uri": "^6.4",
-        "phpunit/phpunit": "^9.0",
+        "phpunit/phpunit": "^9.5",
         "vimeo/psalm": "^4.6",
         "psalm/plugin-phpunit": "^0.15.1",
         "friendsofphp/php-cs-fixer": "^2.18",
@@ -39,7 +40,8 @@
         }
     },
     "suggest": {
-        "psr/http-factory-implementation": "To convert a URI string to a PSR-7 UriInterface"
+        "psr/http-factory-implementation": "To convert a URI string to a PSR-7 UriInterface",
+        "psr/http-message-implementation": "To use a PSR-7 compliant package"
     },
     "scripts": {
         "psalm": "psalm --show-info=true",
@@ -62,7 +64,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0-dev"
+            "dev-master": "1.x-dev"
         }
     }
 }
