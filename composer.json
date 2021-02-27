@@ -1,0 +1,68 @@
+{
+    "name": "bakame/url-signer",
+    "description": "Generate signed URLs using multiple encryption solution",
+    "keywords": [
+        "security",
+        "encryption",
+        "sign",
+        "url",
+        "uri"
+    ],
+    "homepage": "https://github.com/bakame-php/url-signer",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sebastian De Deyne",
+            "email": "sebastian@spatie.be",
+            "homepage": "https://github.com/sebastiandedeyne",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "psr/http-factory": "^1.0",
+        "league/uri-components": "^2.3"
+    },
+    "require-dev": {
+        "league/uri": "^6.4",
+        "phpunit/phpunit": "^9.0",
+        "vimeo/psalm": "^4.6",
+        "psalm/plugin-phpunit": "^0.15.1",
+        "friendsofphp/php-cs-fixer": "^2.18",
+        "phpstan/phpstan": "^0.12.79",
+        "phpstan/phpstan-phpunit": "^0.12.17",
+        "phpstan/phpstan-strict-rules": "^0.12.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bakame\\UrlSigner\\": "src"
+        }
+    },
+    "suggest": {
+        "psr/http-factory-implementation": "To convert a URI string to a PSR-7 UriInterface"
+    },
+    "scripts": {
+        "psalm": "psalm --show-info=true",
+        "phpstan": "phpstan analyse -l max -c phpstan.neon src --memory-limit 192M",
+        "phpunit": "phpunit --coverage-text",
+        "phpcs": "php-cs-fixer fix -vvv --allow-risky=yes --ansi",
+        "test": [
+            "@phpunit",
+            "@psalm",
+            "@phpstan",
+            "@phpcs"
+        ]
+    },
+    "scripts-descriptions": {
+        "phpcs": "Runs coding style test suite",
+        "phpstan": "Runs complete codebase static analysis",
+        "phpunit": "Runs unit and functional testing",
+        "psalm": "Runs complete codebase static analysis",
+        "test": "Runs all tests except for infection test"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

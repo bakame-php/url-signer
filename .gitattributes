@@ -1,0 +1,13 @@
+* text=auto
+
+/.editorconfig     export-ignore
+/.gitattributes    export-ignore
+/.github           export-ignore
+/.gitignore        export-ignore
+/.php_cs           export-ignore
+/infection.json    export-ignore
+/phpunit.xml       export-ignore
+/psalm.xml         export-ignore
+/**/*Test.php      export-ignore
+/CHANGELOG.md      export-ignore
+/README.md         export-ignore
