@@ -11,11 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use Psr\Http\Message\UriInterface;
 
-interface UrlEncryptor
+interface UriEncryptor
 {
     /**
      * @throws EncryptionError if the UriInterface object can not be encrypted
@@ -25,5 +25,5 @@ interface UrlEncryptor
     /**
      * @throws EncryptionError if the UriInterface object can not be decrypted
      */
-    public function decrypt(UriInterface $uri): UriInterface;
+    public function decrypt(UriInterface $encryptedUri): UriInterface;
 }

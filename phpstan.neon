@@ -4,7 +4,7 @@ includes:
   - vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
   ignoreErrors:
-    - message: '#Variable static method call on Bakame\\UrlSigner\\Hmac.#'
+    - message: '#Variable static method call on Bakame\\UriSigner\\Hmac.#'
       path: src/HmacTest.php
   reportUnmatchedIgnoredErrors: true
   checkMissingIterableValueType: false

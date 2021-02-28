@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use League\Uri\Components\Query;
 use League\Uri\Http;
@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 final class PipelineTest extends TestCase
 {
     /**
-     * @param array<UrlEncryptor> $strategies
+     * @param array<UriEncryptor> $strategies
      */
     public function pipe(array $strategies): Pipeline
     {

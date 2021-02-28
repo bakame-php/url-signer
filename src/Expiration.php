@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use DateInterval;
 use DateTimeImmutable;
@@ -61,7 +61,7 @@ final class Expiration implements QueryEncryptor
     {
         $query = Query::createFromUri($uri);
         if ($query->has($this->parameterName)) {
-            throw QueryEncryptionError::dueToAlreadyPresentParameter($this->parameterName);
+            throw QueryEncryptionError::dueToAlreadyPresentParameter($this->parameterName, $uri);
         }
 
         /** @var string $queryString */
@@ -70,16 +70,16 @@ final class Expiration implements QueryEncryptor
         return $uri->withQuery($queryString);
     }
 
-    public function decrypt(UriInterface $uri): UriInterface
+    public function decrypt(UriInterface $encryptedUri): UriInterface
     {
-        $query = Query::createFromUri($uri);
+        $query = Query::createFromUri($encryptedUri);
         $expiration = $query->get($this->parameterName);
 
         return match (true) {
-            null === $expiration => throw QueryEncryptionError::dueToMissingParameter($this->parameterName),
-            false === ($timestamp = filter_var($expiration, FILTER_VALIDATE_INT)) => throw QueryEncryptionError::dueToWrongValue($this->parameterName),
-            $this->isPast($timestamp) => throw new QueryEncryptionError('Corrupted Url, the expiration date "'.$timestamp.'" must be in the future.'),
-            default => $uri->withQuery((string) $query->withoutPair($this->parameterName)->toRFC3986()),
+            null === $expiration => throw QueryEncryptionError::dueToMissingParameter($this->parameterName, $encryptedUri),
+            false === ($timestamp = filter_var($expiration, FILTER_VALIDATE_INT)) => throw QueryEncryptionError::dueToWrongValue($this->parameterName, $encryptedUri),
+            $this->isPast($timestamp) => throw new QueryEncryptionError('Corrupted Url, the expiration date "'.$timestamp.'" must be in the future.', $encryptedUri),
+            default => $encryptedUri->withQuery((string) $query->withoutPair($this->parameterName)->toRFC3986()),
         };
     }
 }

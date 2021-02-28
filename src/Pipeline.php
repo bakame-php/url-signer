@@ -11,15 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use Psr\Http\Message\UriInterface;
 
-final class Pipeline implements UrlEncryptor
+final class Pipeline implements UriEncryptor
 {
     private array $modifiers;
 
-    public function __construct(UrlEncryptor ...$modifiers)
+    public function __construct(UriEncryptor ...$modifiers)
     {
         $this->modifiers = $modifiers;
     }
@@ -28,17 +28,17 @@ final class Pipeline implements UrlEncryptor
     {
         return array_reduce(
             $this->modifiers,
-            fn (UriInterface $uri, UrlEncryptor $modifier): UriInterface => $modifier->encrypt($uri),
+            fn (UriInterface $uri, UriEncryptor $modifier): UriInterface => $modifier->encrypt($uri),
             $uri
         );
     }
 
-    public function decrypt(UriInterface $uri): UriInterface
+    public function decrypt(UriInterface $encryptedUri): UriInterface
     {
         return array_reduce(
             array_reverse($this->modifiers),
-            fn (UriInterface $uri, UrlEncryptor $modifier): UriInterface => $modifier->decrypt($uri),
-            $uri
+            fn (UriInterface $uri, UriEncryptor $modifier): UriInterface => $modifier->decrypt($encryptedUri),
+            $encryptedUri
         );
     }
 }

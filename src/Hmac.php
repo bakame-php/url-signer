@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use BadMethodCallException;
 use League\Uri\Components\Query;
@@ -73,7 +73,7 @@ final class Hmac implements QueryEncryptor
     {
         $query = Query::createFromUri($uri);
         if ($query->has($this->parameterName)) {
-            throw QueryEncryptionError::dueToAlreadyPresentParameter($this->parameterName);
+            throw QueryEncryptionError::dueToAlreadyPresentParameter($this->parameterName, $uri);
         }
 
         return $uri->withQuery(
@@ -86,16 +86,16 @@ final class Hmac implements QueryEncryptor
         return hash_hmac($this->algorithm, (string) $uri, $this->secret);
     }
 
-    public function decrypt(UriInterface $uri): UriInterface
+    public function decrypt(UriInterface $encryptedUri): UriInterface
     {
-        $query = Query::createFromUri($uri);
+        $query = Query::createFromUri($encryptedUri);
         $signature = $query->get($this->parameterName);
-        $unsignedUrl = $uri->withQuery((string) $query->withoutPair($this->parameterName)->toRFC3986());
+        $unsignedUrl = $encryptedUri->withQuery((string) $query->withoutPair($this->parameterName)->toRFC3986());
 
         return match (true) {
-            null === $signature => throw QueryEncryptionError::dueToMissingParameter($this->parameterName),
-            1 !== preg_match('/^[0-9a-f]+$/', $signature) => throw QueryEncryptionError::dueToWrongValue($this->parameterName),
-            !hash_equals($signature, $this->createSignature($unsignedUrl)) => throw QueryEncryptionError::dueToWrongValue($this->parameterName),
+            null === $signature => throw QueryEncryptionError::dueToMissingParameter($this->parameterName, $encryptedUri),
+            1 !== preg_match('/^[0-9a-f]+$/', $signature) => throw QueryEncryptionError::dueToWrongValue($this->parameterName, $encryptedUri),
+            !hash_equals($signature, $this->createSignature($unsignedUrl)) => throw QueryEncryptionError::dueToWrongValue($this->parameterName, $encryptedUri),
             default => $unsignedUrl,
         };
     }

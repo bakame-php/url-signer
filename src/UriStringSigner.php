@@ -11,16 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use Psr\Http\Message\UriFactoryInterface;
 
 use Throwable;
 
-final class UrlSigner
+final class UriStringSigner
 {
     public function __construct(
-        private UrlEncryptor $urlEncryptor,
+        private UriEncryptor $urlEncryptor,
         private UriFactoryInterface $uriFactory
     ) {
     }

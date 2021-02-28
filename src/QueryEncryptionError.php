@@ -11,35 +11,46 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
 
 final class QueryEncryptionError extends InvalidArgumentException implements EncryptionError
 {
-    public static function dueToMissingParameter(string $parameterName): self
+    private UriInterface|null $uri;
+
+    public function __construct(string $message, UriInterface|null $uri = null)
     {
-        return new self('The parameter "'.$parameterName.'" is missing or contains no value.');
+        parent::__construct($message);
+        $this->uri = $uri;
     }
 
-    public static function dueToMissingValue(string $parameterName): self
+    public static function dueToMissingParameter(string $parameterName, UriInterface $uri = null): self
     {
-        return new self('The parameter "'.$parameterName.'" contains no value.');
+        return new self('The parameter "'.$parameterName.'" is missing or contains no value.', $uri);
     }
 
-    public static function dueToWrongValue(string $parameterName): self
+    public static function dueToMissingValue(string $parameterName, UriInterface $uri = null): self
     {
-        return new self('The parameter "'.$parameterName.'" contains invalid value.');
+        return new self('The parameter "'.$parameterName.'" contains no value.', $uri);
     }
 
-    public static function dueToAlreadyPresentParameter(string $parameterName): self
+    public static function dueToWrongValue(string $parameterName, UriInterface $uri = null): self
     {
-        return new self('The parameter "'.$parameterName.'" reserved for generating signed URI is already present. Please rename your parameter.');
+        return new self('The parameter "'.$parameterName.'" contains invalid value.', $uri);
+    }
+
+    public static function dueToAlreadyPresentParameter(string $parameterName, UriInterface $uri = null): self
+    {
+        return new self(
+            'The parameter "'.$parameterName.'" reserved for generating signed URI is already present. Please rename your parameter.',
+            $uri
+        );
     }
 
     public static function dueToCorruptedUrl(UriInterface $uri): self
     {
-        return new self('The URI "'.$uri.'" is an invalid signed UR.');
+        return new self('The URI "'.$uri.'" is an invalid signed URI.', $uri);
     }
 }

@@ -1,28 +1,33 @@
 # Create signed URLs
 
-This package can signed URLs. 
-
-**This is a fork/rewrite of spatie/url-signer**
+This package can signed URLs.
 
 ```php
-use Bakame\UrlSigner\Spatie;
-use Bakame\UrlSigner\UrlSigner;
+use Bakame\UriSigner\Hmac;
+use Bakame\UriSigner\Expiration;
+use Bakame\UriSigner\UriStringSigner;
 use League\Uri\HttpFactory;
 
-$strategy = Spatie::fromExpiration(new DateTimeImmutable('+30 days'), 'randomkey');
-$urlSigner = new UrlSigner($strategy, new HttpFactory());
-$urlSigner->encrypt('https://myapp.com');
+$strategy1 = Expiration::after(new DateInterval('PT6H'));
+$urlSigner = new UriStringSigner($strategy1, new HttpFactory());
+$url = $urlSigner->encrypt('https://myapp.com');
 
-// => The generated url will be valid for 30 days and will be signed using the md5 algorithm and a secret key
+$strategy2 = Hmac::sha256('random_key');
+$urlSigner2 = new UriStringSigner($strategy2, new HttpFactory());
+$url = $urlSigner2->encrypt($url);
+
+
+// => The generated url will expire after 6 hours amd will be signed using the sha256 algorithm and a secret key
 ```
 
-This will output an URL that looks like `https://myapp.com/?expires=xxxx&signature=xxxx`.
+This will output an URL that looks like `https://myapp.com/?expires=xxx&signature=xxxx`.
 
 Imagine mailing this URL out to the users of your application. When a user clicks on a signed URL
 your application can validate it with:
 
 ```php
-$urlSigner->validate('https://myapp.com/?expires=xxxx&signature=xxxx');
+$urlSigner1->validate('https://myapp.com/?expires=xxxx&signature=xxxx'); // return true
+$urlSigner2->validate('https://myapp.com/?expires=xxxx&signature=xxxx'); // return true
 ```
 
 ## System Requirements
@@ -54,18 +59,18 @@ signing strategy by:
 - using the `Bakame\UrlSigner\Hmac` class.
 
 ```php
-use Bakame\UrlSigner\Expiration;
-use Bakame\UrlSigner\Hmac;
-use Bakame\UrlSigner\Pipeline;
-use Bakame\UrlSigner\UrlSigner;
+use Bakame\UriSigner\Expiration;
+use Bakame\UriSigner\Hmac;
+use Bakame\UriSigner\Pipeline;
+use Bakame\UriSigner\UriStringSigner;
 use League\Uri\HttpFactory;
 
 $strategy = new Pipeline(
-    Expiration::at(new DateTimeImmutable('+30 days')),
-    Hmac::md5('randomkey'),
+    Expiration::after(new DateInterval('PT6H')),
+    Hmac::sha256('random_key'),
 );
 
-$urlSigner = new UrlSigner($strategy, new HttpFactory());
+$urlSigner = new UriStringSigner($strategy, new HttpFactory());
 ```
 
 ### Validating URLs

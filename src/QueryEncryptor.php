@@ -11,9 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
-interface QueryEncryptor extends UrlEncryptor
+interface QueryEncryptor extends UriEncryptor
 {
     public function parameterName(): string;
 }

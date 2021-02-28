@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Bakame\UrlSigner;
+namespace Bakame\UriSigner;
 
 use BadMethodCallException;
 use League\Uri\Components\Query;
