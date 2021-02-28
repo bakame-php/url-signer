@@ -18,7 +18,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-final class Psr15UriValidatorMiddleware implements MiddlewareInterface
+final class UriValidatorMiddleware implements MiddlewareInterface
 {
     public function __construct(
         private UriEncryptor $uriEncryptor,
@@ -32,12 +32,13 @@ final class Psr15UriValidatorMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $signedUrl = $request->getUri();
-        $unsignedUrl = $this->uriEncryptor->decrypt($signedUrl);
 
         return $handler->handle(
             $request
-                ->withAttribute($this->attributeName, $unsignedUrl)
-                ->withUri($unsignedUrl)
+                ->withAttribute($this->attributeName, $signedUrl)
+                ->withUri(
+                    $this->uriEncryptor->decrypt($signedUrl)
+                )
         );
     }
 }
